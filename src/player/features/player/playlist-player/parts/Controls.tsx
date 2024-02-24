@@ -35,7 +35,7 @@ export function Controls({
         dispatch(playPause(!playing));
     }
 
-    function handlRepeat() {
+    function handleRepeat() {
         switch (playbackRepeat) {
             case "off":
                 dispatch(repeat("playlist"));
@@ -92,7 +92,7 @@ export function Controls({
 >
     <Next />
     </IconButton>
-    <IconButton aria-label={`repeat ${playbackRepeat}`} onClick={handlRepeat}>
+    <IconButton aria-label={`repeat ${playbackRepeat}`} onClick={handleRepeat}>
     {playbackRepeat === "off" ? (
         <RepeatIcon />
     ) : playbackRepeat === "playlist" ? (
