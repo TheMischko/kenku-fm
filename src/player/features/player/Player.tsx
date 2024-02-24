@@ -4,7 +4,7 @@ import Paper from "@mui/material/Paper";
 import Container from "@mui/material/Container";
 
 import { SoundboardPlayer } from "./SoundboardPlayer";
-import { PlaylistPlayer } from "./PlaylistPlayer";
+import { PlaylistPlayer } from "./playlist-player/PlaylistPlayer";
 
 type PlayerProps = {
   onPlaylistNext: () => void;
