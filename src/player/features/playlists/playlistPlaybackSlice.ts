@@ -17,12 +17,19 @@ export interface Playback {
 
 export type Repeat = "off" | "track" | "playlist";
 
+export type Sleep = {
+  enabled: boolean,
+  min: number,
+  max: number
+}
+
 export interface PlaylistPlaybackState {
   queue?: Queue;
   playing: boolean;
   volume: number;
   muted: boolean;
   shuffle: boolean;
+  sleep: Sleep;
   repeat: Repeat;
   track?: Track;
   playback?: Playback;
@@ -33,6 +40,11 @@ const initialState: PlaylistPlaybackState = {
   volume: 1,
   muted: false,
   shuffle: false,
+  sleep: {
+    enabled: false,
+    min: 0,
+    max: 0
+  },
   repeat: "playlist",
 };
 
@@ -159,6 +171,9 @@ export const playlistPlaybackSlice = createSlice({
     repeat: (state, action: PayloadAction<Repeat>) => {
       state.repeat = action.payload;
     },
+    sleep: (state, action: PayloadAction<Sleep>) => {
+      state.sleep = action.payload
+    }
   },
 });
 
@@ -175,6 +190,7 @@ export const {
   mute,
   shuffle,
   repeat,
+  sleep
 } = playlistPlaybackSlice.actions;
 
 export default playlistPlaybackSlice.reducer;

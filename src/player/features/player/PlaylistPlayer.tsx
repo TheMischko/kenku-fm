@@ -26,7 +26,10 @@ import {
   mute,
   shuffle,
   repeat,
+  sleep,
+  Sleep,
 } from "../playlists/playlistPlaybackSlice";
+import {HourglassBottom} from "@mui/icons-material";
 
 const TimeSlider = styled(Slider)({
   color: "#fff",
@@ -124,8 +127,13 @@ function Controls({
   const playbackShuffle = useSelector(
     (state: RootState) => state.playlistPlayback.shuffle
   );
+  const playbackSleep = useSelector(
+      (state: RootState) => {
+        return state.playlistPlayback.sleep
+      }
+  )
   const disabled = useSelector(
-    (state: RootState) => !Boolean(state.playlistPlayback.playback)
+    (state: RootState) => !state.playlistPlayback.playback
   );
   const playing = useSelector(
     (state: RootState) => state.playlistPlayback.playing
@@ -138,7 +146,7 @@ function Controls({
     dispatch(playPause(!playing));
   }
 
-  function handlRepeat() {
+  function handleRepeat() {
     switch (playbackRepeat) {
       case "off":
         dispatch(repeat("playlist"));
@@ -153,8 +161,17 @@ function Controls({
   }
 
   function handleShuffle() {
+    console.log("test");
     const newShuffle = !playbackShuffle;
     dispatch(shuffle(newShuffle));
+  }
+
+  function handleSleep(){
+    const newSleep:Sleep = {
+      ...playbackSleep,
+      enabled: !playbackSleep.enabled
+    };
+    dispatch(sleep(newSleep));
   }
 
   return (
@@ -167,6 +184,9 @@ function Controls({
         flexGrow: 1,
       }}
     >
+      <IconButton aria-label="sleep" onClick={handleSleep}>
+        <HourglassBottom color={playbackSleep.enabled ? "primary" : undefined}/>
+      </IconButton>
       <IconButton aria-label="shuffle" onClick={handleShuffle}>
         <Shuffle color={playbackShuffle ? "primary" : undefined} />
       </IconButton>
@@ -195,7 +215,7 @@ function Controls({
       >
         <Next />
       </IconButton>
-      <IconButton aria-label={`repeat ${playbackRepeat}`} onClick={handlRepeat}>
+      <IconButton aria-label={`repeat ${playbackRepeat}`} onClick={handleRepeat}>
         {playbackRepeat === "off" ? (
           <RepeatIcon />
         ) : playbackRepeat === "playlist" ? (
@@ -289,7 +309,7 @@ function Time({ onPlaylistSeek }: Pick<PlaylistPlayerProps, "onPlaylistSeek">) {
         min={0}
         step={1}
         max={duration}
-        disabled={!Boolean(playback)}
+        disabled={!playback}
         onChange={(_, value) => setTimeOverride(value as number)}
         onChangeCommitted={handleTimeChange}
       />
